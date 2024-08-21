@@ -45,7 +45,7 @@ The Events and Activities App is a MERN stack application that provides tools fo
 
 ## API Documentation
 
-For detailed API documentation, please refer to the [API Documentation](#) (insert link to API documentation).
+For detailed API documentation, please refer to the [API Documentation](https://eventsandactivities.atlassian.net/wiki/spaces/~71202058f0a4b7eafc47618aff3831b1eb33fa/pages/edit-v2/98325?draftShareId=f267453c-0e7e-49f7-a6ab-02485b41a4fb) (insert link to API documentation).
 
 ## Deployment
 
@@ -60,7 +60,7 @@ The application is deployed on Azure. You can access the live site at the follow
 
 - [Live Site](https://wonderful-water-0e6b1631e.5.azurestaticapps.net/)
 - [API Documentation](https://eventsandactivities.atlassian.net/wiki/spaces/~71202058f0a4b7eafc47618aff3831b1eb33fa/pages/edit-v2/655600?draftShareId=c100078d-de6d-481c-b42c-eab8077f64de)
-- [GitHub Repository](https://github.com/yourusername/events-and-activities-app)
+- [GitHub Repository](https://github.com/Heisenburg-z/Event-and-Activities)
 
 ---
 
