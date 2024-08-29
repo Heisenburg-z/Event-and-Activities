@@ -1,8 +1,16 @@
 import React from 'react';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import Login from './Pages/Login/Login';
 
 function App() {
-  const value = 'MERN?!';
-  return <h3>Hello {value}</h3>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Login />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
