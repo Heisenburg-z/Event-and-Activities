@@ -7,7 +7,7 @@ const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #ffecb3;  /* Vibrant event-themed background */
+  background: linear-gradient(120deg, #f0f0f0, #d9d9d9);
   padding: 2rem;
 `;
 
@@ -56,14 +56,14 @@ const Input = styled.input`
   font-size: 1rem;
   box-shadow: inset 0px 3px 6px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s ease;
-
+  
   &:focus {
-    border-color: #f9a825;  /* Matching focus color with the event theme */
+    border-color: #333;
   }
 `;
 
 const Button = styled.button`
-  background-color: #f57c00;  /* Event-themed button color */
+  background-color: #333;
   color: #fff;
   padding: 1rem;
   border: none;
@@ -75,44 +75,14 @@ const Button = styled.button`
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #ef6c00;  /* Slightly darker on hover */
+    background-color: #555;
     transform: translateY(-3px);
-  }
-`;
-
-const GoogleButton = styled.button`
-  background-color: #ffffff;  /* White background for Google button */
-  color: #4285F4;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #f1f1f1;  /* Slight hover effect */
-    transform: translateY(-3px);
-  }
-
-  &::before {
-    content: '';
-    background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center center;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
-    margin-right: 0.5rem;
   }
 `;
 
 const ImageContainer = styled.div`
   width: 50%;
-  background-color: #ffecb3;  /* Light event-themed background */
+  background-color: #ececec;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,13 +97,12 @@ const Image = styled.img`
   transform: rotate(-5deg);
 `;
 
-const Login = () => {
+const Signup = () => {
   return (
     <LoginContainer>
       <Card>
         <FormContainer>
-          <Title>Login</Title>
-
+          <Title>Create Account</Title>
           <FormGroup>
             <Label htmlFor="firstName">First name*</Label>
             <Input type="text" id="firstName" placeholder="Enter your first name" />
@@ -146,8 +115,8 @@ const Login = () => {
             <Label htmlFor="password">Password*</Label>
             <Input type="password" id="password" placeholder="Create a password" />
           </FormGroup>
-          <Button>Login</Button>
-          <GoogleButton>Continue with Google</GoogleButton>
+          <Button>Create Account</Button>
+          <Button style={{ backgroundColor: '#4285F4', marginTop: '1rem' }}>Continue with Google</Button>
         </FormContainer>
         <ImageContainer>
           <Image src={witsImage} alt="Login Illustration" />
@@ -157,4 +126,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
