@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from '../../components/Sidebar';
+import { Routes, Route } from 'react-router-dom';
 import EventCalendar from '../../components/EventCalendar';
 import UserProfile from '../../components/UserProfile';
-import { Routes, Route } from 'react-router-dom';
 import EventDetails from '../../components/EventDetails';
 import EditProfile from '../../components/EditProfile';
 
@@ -16,6 +16,7 @@ const ContentArea = styled.div`
   flex-grow: 1;
   padding: 2rem;
   overflow-y: auto;
+  background-color: #f5f5f5;
 `;
 
 const Dashboard = () => {
@@ -28,7 +29,7 @@ const Dashboard = () => {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/events/:id" element={<EventDetails />} />
-          {/* Add other routes as needed */}
+         
         </Routes>
       </ContentArea>
     </DashboardContainer>
@@ -36,5 +37,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-  
+
  

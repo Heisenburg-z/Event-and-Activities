@@ -27,8 +27,8 @@ const EventCalendar = () => {
         // Format events for react-big-calendar
         const formattedEvents = data.map(event => ({
           title: event.title,
-          start: new Date(event.start), // assuming the event has a start date
-          end: new Date(event.end),     // assuming the event has an end date
+          start: new Date(event.start), 
+          end: new Date(event.end),     
           allDay: event.allDay || false,
         }));
         setEvents(formattedEvents);
