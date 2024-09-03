@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db'); // Adjust the path to your db.js
+const connectDB = require('./config/db');
 
 require('dotenv').config();
 
