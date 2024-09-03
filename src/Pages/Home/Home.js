@@ -12,7 +12,7 @@ function Home() {
                     <div className="main-content">
                         <div className="past-events-container">
                             <h2>
-                                Past Events
+                                Past Events1
                             </h2>
                             
                             <PastEvents />
