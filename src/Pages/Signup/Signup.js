@@ -65,7 +65,8 @@ const Signup = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newUser)
+      // body: JSON.stringify(newUser)
+        body: JSON(newUser)
     });
 
     // Check if response is OK
