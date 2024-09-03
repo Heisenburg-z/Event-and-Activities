@@ -17,37 +17,81 @@ const Signup = () => {
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // const onSubmit = async e => {
+  //   e.preventDefault();
+
+  //   const newUser = {
+  //     firstName,
+  //     surname,
+  //     email,
+  //     password
+  //   };
+
+  //   try {
+  //     const res = await fetch('/api/auth/register', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(newUser)
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (res.ok) {
+  //       navigate('/login'); // Redirect to the login page upon successful signup
+  //     } else {
+  //       setError(data.msg); // Set the error message if signup fails
+  //     }
+  //   } catch (err) {
+  //     console.error(err.message);
+  //     setError('An error occurred. Please try again later.');
+  //   }
+  // };
+
   const onSubmit = async e => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const newUser = {
-      firstName,
-      surname,
-      email,
-      password
-    };
-
-    try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newUser)
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        navigate('/login'); // Redirect to the login page upon successful signup
-      } else {
-        setError(data.msg); // Set the error message if signup fails
-      }
-    } catch (err) {
-      console.error(err.message);
-      setError('An error occurred. Please try again later.');
-    }
+  const newUser = {
+    firstName,
+    surname,
+    email,
+    password
   };
+
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUser)
+    });
+
+    // Check if response is OK
+    if (!res.ok) {
+      // Attempt to parse JSON from the response
+      const errorData = await res.text();
+      // Handle non-JSON response
+      try {
+        const parsedErrorData = JSON.parse(errorData);
+        setError(parsedErrorData.msg || 'An error occurred.');
+      } catch (jsonError) {
+        setError('An error occurred. Please try again later.');
+      }
+      return;
+    }
+
+    // Parse JSON from response if OK
+    const data = await res.json();
+    navigate('/login'); // Redirect to the login page upon successful signup
+
+  } catch (err) {
+    console.error(err.message);
+    setError('An error occurred. Please try again later.');
+  }
+};
+
 
   return (
     <div className="container-center">
