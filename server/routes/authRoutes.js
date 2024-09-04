@@ -1,9 +1,11 @@
-
+// import '../config/db'
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user'); 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const connectDB = require('../config/db'); 
+
 
 
 router.post('/login', async (req, res) => {
@@ -11,6 +13,8 @@ router.post('/login', async (req, res) => {
 
   try {
     const db = await connectDB(); 
+    console.log("MongoDB URI:", process.env.MONGO_URI);
+
     const usersCollection = db.collection('users'); 
 
     

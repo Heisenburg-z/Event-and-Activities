@@ -20,4 +20,4 @@ yarn-error.log*
 *.sln
 
 # Ignore any sensitive config files
-/config/db.js
+
