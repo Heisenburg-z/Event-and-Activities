@@ -10,8 +10,9 @@ const Signup = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState(''); // State to handle errors
-  const navigate = useNavigate(); // Use navigate instead of history.push
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  
 
   const { firstName, surname, email, password } = formData;
 
@@ -27,11 +28,12 @@ const Signup = () => {
       password
     };
 
-    // Use environment variable for API URL
     const API_URL = process.env.REACT_APP_API_URL;
+    console.log(API_URL, "cheking");  // Should output: http://localhost:5000/api
+
 
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -40,10 +42,10 @@ const Signup = () => {
       });
 
       if (!res.ok) {
-        const errorData = await res.text(); // Get response as text in case it's not JSON
+        const errorData = await res.text();
         try {
-          const parsedErrorData = JSON.parse(errorData); // Try parsing as JSON
-          setError(parsedErrorData.msg || 'An error occurred.');
+          const parsedErrorData = JSON.parse(errorData);
+          setError(parsedErrorData.message || 'An error occurred.');
         } catch (jsonError) {
           setError('An error occurred. Please try again later.');
         }
@@ -51,7 +53,7 @@ const Signup = () => {
       }
 
     // Parse JSON from response if OK
-    //const data = await res.json();
+    const data = await res.json();
     navigate('/login'); // Redirect to the login page upon successful signup
 
     } catch (err) {
@@ -110,7 +112,7 @@ const Signup = () => {
                 required
               />
             </div>
-            {error && <p className="error-message">{error}</p>} {/* Display error message */}
+            {error && <p className="error-message">{error}</p>}
             <button className="button">Create Account</button>
           </form>
           <button className="button button-google">Continue with Google</button>
