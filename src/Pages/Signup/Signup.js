@@ -1,39 +1,38 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../globals.css';
-import witsImage from '../../images/wits.png';
+import '../../globals.css';  
+import witsImage from '../../images/wits.png';  
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
+  const [formState, setFormState] = useState({
+    name: '',
     surname: '',
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-  
+  const [errorMessage, setErrorMessage] = useState(null);  
 
-  const { firstName, surname, email, password } = formData;
+  const handleChange = (e) => {
+    setFormState({
+      ...formState,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
+ 
     const newUser = {
-      firstName,
-      surname,
-      email,
-      password
+      name: formState.name,
+      surname: formState.surname,
+      email: formState.email,
+      password: formState.password
     };
 
-    const API_URL = process.env.REACT_APP_API_URL;
-    console.log(API_URL, "cheking");  // Should output: http://localhost:5000/api
-
+    console.log("New User Data: ", newUser);  
 
     try {
-      const res = await fetch(`${API_URL}/auth/signup`, {
+      const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -41,41 +40,39 @@ const Signup = () => {
         body: JSON.stringify(newUser)
       });
 
+      // Check if response is not ok
       if (!res.ok) {
-        const errorData = await res.text();
-        try {
-          const parsedErrorData = JSON.parse(errorData);
-          setError(parsedErrorData.message || 'An error occurred.');
-        } catch (jsonError) {
-          setError('An error occurred. Please try again later.');
-        }
-        return;
+        const errorData = await res.json();
+        console.log("Error Response: ", errorData);
+        setErrorMessage(errorData.message || 'Signup failed');  
+      } else {
+        const data = await res.json();
+        console.log("Success: ", data);
+        
+        window.location.href = '/login';
       }
-
-    // Parse JSON from response if OK
-    const data = await res.json();
-    navigate('/login'); // Redirect to the login page upon successful signup
-
-    } catch (err) {
-      console.error(err.message);
-      setError('An error occurred. Please try again later.');
+    } catch (error) {
+      console.error("Error during signup: ", error);
+      setErrorMessage('Something went wrong. Please try again.');
     }
   };
 
   return (
-    <div className="container-center">
+    <div className="container-center">  
       <div className="card">
         <div className="form-container">
-          <h1 className="title">Create Account</h1>
+          <h1 className="title">Sign Up</h1>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <form onSubmit={onSubmit}>
             <div className="form-group">
-              <label className="label">First name*</label>
+              <label className="label">Name*</label>
               <input
                 className="input"
                 type="text"
-                name="firstName"
-                value={firstName}
-                onChange={onChange}
+                name="name"
+                placeholder="Name"
+                value={formState.name}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -85,8 +82,9 @@ const Signup = () => {
                 className="input"
                 type="text"
                 name="surname"
-                value={surname}
-                onChange={onChange}
+                placeholder="Surname"
+                value={formState.surname}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -96,8 +94,9 @@ const Signup = () => {
                 className="input"
                 type="email"
                 name="email"
-                value={email}
-                onChange={onChange}
+                placeholder="Email"
+                value={formState.email}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -107,21 +106,20 @@ const Signup = () => {
                 className="input"
                 type="password"
                 name="password"
-                value={password}
-                onChange={onChange}
+                placeholder="Password"
+                value={formState.password}
+                onChange={handleChange}
                 required
               />
             </div>
-            {error && <p className="error-message">{error}</p>}
-            <button className="button">Create Account</button>
+            <button className="button" type="submit">Sign Up</button>
           </form>
-          <button className="button button-google">Continue with Google</button>
           <p className="text-link">
             Already have an account? <a href="/login">Login</a>
           </p>
         </div>
         <div className="image-container">
-          <img src={witsImage} alt="Signup Illustration" className="image" />
+          <img src={witsImage} alt="Login Illustration" className="image" />  
         </div>
       </div>
     </div>
