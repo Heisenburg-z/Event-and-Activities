@@ -1,8 +1,12 @@
+// Load environment variables first
+require('dotenv').config(); 
+
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('../server/config/db');
 
-require('dotenv').config();
+console.log(process.env); // To list all environment variables
+console.log("MongoDB URI:", process.env.MONGO_URI); // Check MONGO_URI is loaded
 
 const app = express();
 
@@ -10,7 +14,6 @@ const app = express();
 app.use(express.json({ extended: false }));
 app.use(cors());
 
-// Connect to the database
 async function startServer() {
   await connectDB(); // Wait for the DB connection to be established
   // Routes
