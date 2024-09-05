@@ -51,7 +51,7 @@ const Signup = () => {
       }
 
     // Parse JSON from response if OK
-    const data = await res.json();
+    //const data = await res.json();
     navigate('/login'); // Redirect to the login page upon successful signup
 
     } catch (err) {
