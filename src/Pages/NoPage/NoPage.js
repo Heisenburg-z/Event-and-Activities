@@ -57,7 +57,7 @@ const NoPage = () => {
       <Image src={witsImage} alt="404 Illustration" />
       <Title>Oops! Page Not Found</Title>
       <Subtitle>We can't seem to find the page you're looking for.</Subtitle>
-      <Button onClick={() => window.location.href = '/'}>Go Back Home</Button>
+      <Button onClick={() => window.location.href = '/home'}>Go Back Home</Button>
     </Container>
   );
 };

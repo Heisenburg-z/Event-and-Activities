@@ -1,159 +1,89 @@
-import React from 'react';
-import styled from 'styled-components';
-import witsImage from '../../images/wits.png';
-
-const LoginContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: #ffecb3;  /* Vibrant event-themed background */
-  padding: 2rem;
-`;
-
-const Card = styled.div`
-  display: flex;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  max-width: 900px;
-  width: 100%;
-  position: relative;
-`;
-
-const FormContainer = styled.div`
-  padding: 3rem;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  color: #333333;
-  text-align: center;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 1rem;
-`;
-
-const Label = styled.label`
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  display: block;
-  color: #555555;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 0.85rem;
-  border-radius: 8px;
-  border: 2px solid #ddd;
-  font-size: 1rem;
-  box-shadow: inset 0px 3px 6px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
-
-  &:focus {
-    border-color: #f9a825;  /* Matching focus color with the event theme */
-  }
-`;
-
-const Button = styled.button`
-  background-color: #f57c00;  /* Event-themed button color */
-  color: #fff;
-  padding: 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #ef6c00;  /* Slightly darker on hover */
-    transform: translateY(-3px);
-  }
-`;
-
-const GoogleButton = styled.button`
-  background-color: #ffffff;  /* White background for Google button */
-  color: #4285F4;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #f1f1f1;  /* Slight hover effect */
-    transform: translateY(-3px);
-  }
-
-  &::before {
-    content: '';
-    background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center center;
-    background-size: contain;
-    width: 20px;
-    height: 20px;
-    margin-right: 0.5rem;
-  }
-`;
-
-const ImageContainer = styled.div`
-  width: 50%;
-  background-color: #ffecb3;  /* Light event-themed background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const Image = styled.img`
-  max-width: 90%;
-  max-height: 90%;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
-  transform: rotate(-5deg);
-`;
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Context/authContext';
+import '../../globals.css';  // Ensure your styles are applied
+import witsImage from '../../images/wits.png';  // Login image
 
 const Login = () => {
-  return (
-    <LoginContainer>
-      <Card>
-        <FormContainer>
-          <Title>Login</Title>
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');  // Error state for failed login attempts
+  const { login } = useContext(AuthContext);  // Access login function from AuthContext
+  const navigate = useNavigate();  // useNavigate for page navigation
 
-          <FormGroup>
-            <Label htmlFor="firstName">First name*</Label>
-            <Input type="text" id="firstName" placeholder="Enter your first name" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email*</Label>
-            <Input type="email" id="email" placeholder="Enter your email" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password*</Label>
-            <Input type="password" id="password" placeholder="Create a password" />
-          </FormGroup>
-          <Button>Login</Button>
-          <GoogleButton>Continue with Google</GoogleButton>
-        </FormContainer>
-        <ImageContainer>
-          <Image src={witsImage} alt="Login Illustration" />
-        </ImageContainer>
-      </Card>
-    </LoginContainer>
+  const { email, password } = formData;
+
+  // Handle input changes
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  // Handle form submission
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Send login data to server
+      const res = await fetch('http://localhost:5000/api/auth/login', {  // Ensure the correct API URL
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();  // Parse the response
+
+      if (res.ok) {
+        // Save token to localStorage, log the user in, and navigate to home
+        localStorage.setItem('token', data.token);
+        login(data.token);  // Pass token to login function
+        navigate('/home');  // Navigate to home page after successful login
+      } else {
+        setError(data.message);  // Show error message if login fails
+      }
+    } catch (err) {
+      console.error(err.message);
+      setError('An error occurred. Please try again later.');  // Catch network or server errors
+    }
+  };
+
+  return (
+    <div className="container-center">
+      <div className="card">
+        <div className="form-container">
+          <h1 className="title">Login</h1>
+          <form onSubmit={onSubmit}>
+            <div className="form-group">
+              <label className="label">Email*</label>
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={email}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="label">Password*</label>
+              <input
+                className="input"
+                type="password"
+                name="password"
+                value={password}
+                onChange={onChange}
+                required
+              />
+            </div>
+            {error && <p className="error-message">{error}</p>}  
+            <button className="button">Login</button>
+          </form>
+          <button className="button button-google">Continue with Google</button>  
+          <p className="text-link">
+            Don't have an account? <a href="/signup">Create account</a>  
+          </p>
+        </div>
+        <div className="image-container">
+          <img src={witsImage} alt="Login Illustration" className="image" />  
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,38 +1,59 @@
+
+import profilePic from '../../src/images/wits.jpg'; 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { FaHome, FaCalendarAlt, FaTicketAlt, FaBell } from 'react-icons/fa';
 
-const SidebarContainer = styled.div`
-  width: 250px;
-  background-color: #f7f7f7;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-`;
 
-const SidebarItem = styled.div`
-  padding: 1rem;
-  margin: 0.5rem 0;
-  color: #333;
-  cursor: pointer;
-  border-radius: 8px;
-  &:hover {
-    background-color: #e0e0e0;
-  }
-`;
+function Sidebar() {
+  const navigate = useNavigate();
 
-const Sidebar = () => {
+  const handleLogout = () => {
+    
+    localStorage.removeItem('token'); 
+    sessionStorage.clear(); 
+    navigate('/landing'); 
+  };
+
   return (
-    <SidebarContainer>
-      <SidebarItem><Link to="/">Home</Link></SidebarItem>
-      <SidebarItem><Link to="/create-event">Create Event</Link></SidebarItem>
-      <SidebarItem><Link to="/my-events">My Events</Link></SidebarItem>
-      <SidebarItem><Link to="/calendar">Calendar</Link></SidebarItem>
-      <SidebarItem><Link to="/tickets">Tickets</Link></SidebarItem>
-      <SidebarItem><Link to="/notifications">Notifications</Link></SidebarItem>
-      <SidebarItem><Link to="/profile">My Profile</Link></SidebarItem>
-    </SidebarContainer>
+    <div className="sidebar">
+      <div className="profile-section">
+        <img src={profilePic} alt="Profile" className="profile-image" />
+        <h3 className="profile-name">Clement</h3>
+      </div>
+      <nav>
+        <NavLink to="/home" className="nav-link">
+          <FaHome />
+          <span>Home</span>
+        </NavLink>
+        <NavLink to="/create-event" className="nav-link">
+          <FaCalendarAlt />
+          <span>Create Event</span>
+        </NavLink>
+        <NavLink to="/my-events" className="nav-link">
+          <FaCalendarAlt />
+          <span>My Events</span>
+        </NavLink>
+        <NavLink to="/calendar" className="nav-link">
+          <FaCalendarAlt />
+          <span>Calendar</span>
+        </NavLink>
+        <NavLink to="/tickets" className="nav-link">
+          <FaTicketAlt />
+          <span>Tickets</span>
+        </NavLink>
+        <NavLink to="/notifications" className="nav-link">
+          <FaBell />
+          <span>Notifications</span>
+        </NavLink>
+      </nav>
+      <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
+    </div>
   );
-};
+
+}
 
 export default Sidebar;
