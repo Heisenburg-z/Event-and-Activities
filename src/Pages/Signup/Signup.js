@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import witsImage from '../../images/wits.png';
 
@@ -98,24 +98,76 @@ const Image = styled.img`
 `;
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    email: '',
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    // Simple validation
+    if (!formData.firstName || !formData.email || !formData.password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.firstName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setSuccess(result.body);
+      } else {
+        const errorResult = await response.json();
+        setError(errorResult.body);
+      }
+    } catch (err) {
+      setError('Failed to create an account. Please try again.');
+    }
+  };
+
   return (
     <LoginContainer>
       <Card>
         <FormContainer>
           <Title>Create Account</Title>
-          <FormGroup>
-            <Label htmlFor="firstName">First name*</Label>
-            <Input type="text" id="firstName" placeholder="Enter your first name" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email*</Label>
-            <Input type="email" id="email" placeholder="Enter your email" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password*</Label>
-            <Input type="password" id="password" placeholder="Create a password" />
-          </FormGroup>
-          <Button>Create Account</Button>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+          <form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="firstName">First name*</Label>
+              <Input type="text" id="firstName" value={formData.firstName} onChange={handleChange} placeholder="Enter your first name" />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="email">Email*</Label>
+              <Input type="email" id="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="password">Password*</Label>
+              <Input type="password" id="password" value={formData.password} onChange={handleChange} placeholder="Create a password" />
+            </FormGroup>
+            <Button type="submit">Create Account</Button>
+          </form>
           <Button style={{ backgroundColor: '#4285F4', marginTop: '1rem' }}>Continue with Google</Button>
         </FormContainer>
         <ImageContainer>
