@@ -155,7 +155,7 @@ const Login = () => {
         
         // Check if the response is JSON
         if (contentType && contentType.includes('application/json')) {
-          const result = await response.json();
+        await response.json();
           navigate('/dashboard');  // Redirect to Dashboard after login
         } else {
           const textResult = await response.text();  // If it's plain text, handle it as text
