@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate for navigation
 import witsImage from '../../images/wits.png';
 
 const LoginContainer = styled.div`
@@ -7,7 +8,7 @@ const LoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #ffecb3;  /* Vibrant event-themed background */
+  background: #ffecb3;
   padding: 2rem;
 `;
 
@@ -58,12 +59,12 @@ const Input = styled.input`
   transition: border-color 0.3s ease;
 
   &:focus {
-    border-color: #f9a825;  /* Matching focus color with the event theme */
+    border-color: #f9a825;
   }
 `;
 
 const Button = styled.button`
-  background-color: #f57c00;  /* Event-themed button color */
+  background-color: #f57c00;
   color: #fff;
   padding: 1rem;
   border: none;
@@ -75,13 +76,13 @@ const Button = styled.button`
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #ef6c00;  /* Slightly darker on hover */
+    background-color: #ef6c00;
     transform: translateY(-3px);
   }
 `;
 
 const GoogleButton = styled.button`
-  background-color: #ffffff;  /* White background for Google button */
+  background-color: #ffffff;
   color: #4285F4;
   border: 1px solid #ddd;
   padding: 1rem;
@@ -96,7 +97,7 @@ const GoogleButton = styled.button`
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #f1f1f1;  /* Slight hover effect */
+    background-color: #f1f1f1;
     transform: translateY(-3px);
   }
 
@@ -112,7 +113,7 @@ const GoogleButton = styled.button`
 
 const ImageContainer = styled.div`
   width: 50%;
-  background-color: #ffecb3;  /* Light event-themed background */
+  background-color: #ffecb3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,25 +129,68 @@ const Image = styled.img`
 `;
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();  // Use navigate for redirection
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+  
+    try {
+      const response = await fetch('/api/login', {  // Replace with your actual API URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+  
+      if (response.ok) {
+        const contentType = response.headers.get('Content-Type');
+        
+        // Check if the response is JSON
+        if (contentType && contentType.includes('application/json')) {
+          const result = await response.json();
+          navigate('/dashboard');  // Redirect to Dashboard after login
+        } else {
+          const textResult = await response.text();  // If it's plain text, handle it as text
+          console.log(textResult);
+          // You can still redirect if the response indicates success
+          navigate('/dashboard');
+        }
+      } else {
+        const errorResult = await response.json();
+        setError(errorResult.message || 'Login failed');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('An error occurred. Please try again.');
+    }
+  };
+  
+
   return (
     <LoginContainer>
       <Card>
         <FormContainer>
           <Title>Login</Title>
-
-          <FormGroup>
-            <Label htmlFor="firstName">First name*</Label>
-            <Input type="text" id="firstName" placeholder="Enter your first name" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="email">Email*</Label>
-            <Input type="email" id="email" placeholder="Enter your email" />
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password*</Label>
-            <Input type="password" id="password" placeholder="Create a password" />
-          </FormGroup>
-          <Button>Login</Button>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="email">Email*</Label>
+              <Input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="password">Password*</Label>
+              <Input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+            </FormGroup>
+            <Button type="submit">Login</Button>
+          </form>
           <GoogleButton>Continue with Google</GoogleButton>
         </FormContainer>
         <ImageContainer>

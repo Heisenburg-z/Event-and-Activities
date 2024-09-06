@@ -122,7 +122,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/api/signup', {  // Update this URL with your actual Azure function URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,10 +136,10 @@ const Signup = () => {
 
       if (response.ok) {
         const result = await response.json();
-        setSuccess(result.body);
+        setSuccess(result.message); // Adjust based on the actual response structure
       } else {
         const errorResult = await response.json();
-        setError(errorResult.body);
+        setError(errorResult.message || 'An error occurred');
       }
     } catch (err) {
       setError('Failed to create an account. Please try again.');

@@ -22,7 +22,11 @@ app.http('signup', {
             if (!name || !email || !password) {
                 return {
                     status: 400,
-                    body: 'Missing required fields: name, email, and password.'
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',  // Allow all origins for CORS
+                        'Content-Type': 'application/json'   // Return content as JSON
+                    },
+                    body: JSON.stringify({ message: 'Missing required fields: name, email, and password.' })
                 };
             }
 
@@ -36,8 +40,12 @@ app.http('signup', {
             const existingUser = await usersCollection.findOne({ email });
             if (existingUser) {
                 return {
-                    status: 409, // Conflict
-                    body: 'User with this email already exists.'
+                    status: 409,  // Conflict
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',  // Allow all origins for CORS
+                        'Content-Type': 'application/json'   // Return content as JSON
+                    },
+                    body: JSON.stringify({ message: 'User with this email already exists.' })
                 };
             }
 
@@ -49,7 +57,7 @@ app.http('signup', {
             const result = await usersCollection.insertOne({
                 name,
                 email,
-                password: hashedPassword, // Store the hashed password
+                password: hashedPassword,  // Store the hashed password
                 createdAt: new Date()
             });
 
@@ -57,14 +65,22 @@ app.http('signup', {
             await client.close();
 
             return {
-                status: 201, // Created
-                body: `User ${name} signed up successfully!`
+                status: 201,  // Created
+                headers: {
+                    'Access-Control-Allow-Origin': '*',  // Allow all origins for CORS
+                    'Content-Type': 'application/json'   // Return content as JSON
+                },
+                body: JSON.stringify({ message: `User ${name} signed up successfully!` })
             };
         } catch (error) {
             context.log(`Error: ${error.message}`);
             return {
                 status: 500,
-                body: 'Internal server error.'
+                headers: {
+                    'Access-Control-Allow-Origin': '*',  // Allow all origins for CORS
+                    'Content-Type': 'application/json'   // Return content as JSON
+                },
+                body: JSON.stringify({ message: 'Internal server error.' })
             };
         }
     }
