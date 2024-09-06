@@ -142,6 +142,7 @@ const Signup = () => {
         setError(errorResult.body);
       }
     } catch (err) {
+      console.error(err);
       setError('Failed to create an account. Please try again.');
     }
   };
