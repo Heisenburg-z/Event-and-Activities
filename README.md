@@ -1,5 +1,5 @@
 ---
-
+https://demo-app-two-snowy.vercel.app/
 # Events and Activities App
 
 Welcome to the Events and Activities App repository! This project is designed to coordinate and manage all campus events, enhancing engagement and participation by providing a centralized platform for event creation, management, ticketing, and notifications.
